@@ -1,9 +1,9 @@
 import { HoggCellNT } from './HoggCellNT';
 
 export interface HoggTupleNT {
-  create(cells: HoggCellNT[]): HoggTupleNT
+  create(cells: HoggCellNT[]): HoggTupleNT;
 
-  cellsGet(): HoggCellNT[]
+  cellsGet(): HoggCellNT[];
 
-  cellAdd(cell: HoggCellNT): HoggTupleNT
+  cellAdd(cell: HoggCellNT): HoggTupleNT;
 }

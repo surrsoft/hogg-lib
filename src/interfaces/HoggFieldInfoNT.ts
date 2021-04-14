@@ -1,3 +1,3 @@
 export default interface HoggFieldInfoNT {
-  name: string
+  name: string;
 }

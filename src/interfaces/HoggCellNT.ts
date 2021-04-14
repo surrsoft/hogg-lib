@@ -1,7 +1,7 @@
 export interface HoggCellNT {
-  create(columnName: string, value: string): HoggCellNT
+  create(columnName: string, value: string): HoggCellNT;
 
-  columnNameGet(): string
+  columnNameGet(): string;
 
-  valueGet(): string
+  valueGet(): string;
 }

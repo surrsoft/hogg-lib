@@ -11,6 +11,5 @@ export class HoggOffsetCount {
     readonly getAll: boolean = false,
     readonly offset: number = 0,
     readonly count: number = 20
-  ) {
-  }
+  ) {}
 }

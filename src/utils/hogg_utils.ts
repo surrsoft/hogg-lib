@@ -5,12 +5,12 @@ import { HoggTupleNT } from '../interfaces/HoggTupleNT';
  * @param tuples (1) --
  */
 export const columnNamesFrom = (tuples: HoggTupleNT[]): string[] => {
-  const retSet: Set<string> = new Set<string>()
-  tuples.forEach((tuple) => {
-    tuple.cellsGet().forEach((cell) => {
-      const columnName = cell.columnNameGet()
-      retSet.add(columnName)
-    })
-  })
-  return Array.from(retSet)
-}
+  const retSet: Set<string> = new Set<string>();
+  tuples.forEach(tuple => {
+    tuple.cellsGet().forEach(cell => {
+      const columnName = cell.columnNameGet();
+      retSet.add(columnName);
+    });
+  });
+  return Array.from(retSet);
+};

@@ -17,5 +17,4 @@ export class BaseTuple implements HoggTupleNT {
     this.cells.push(cell);
     return this;
   }
-
 }

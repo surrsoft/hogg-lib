@@ -15,7 +15,6 @@ import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
 import { HoggErr } from '../utils/HoggErr';
 
 export class HoggConnectionAirtable implements HoggConnectionNT {
-
   private dbName: string = '';
   private columnNames: string[] = [];
   private tableName: string = '';
@@ -44,7 +43,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   }
 
   private static convertRecord(record: Record): HoggTupleNT {
-    const {fields} = record;
+    const { fields } = record;
     const cees: HoggCellNT[] = [];
     for (const [key, value] of Object.entries(fields)) {
       const cee: HoggCellNT = new BaseCell().create(key, value as string);
@@ -59,7 +58,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   async query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]> {
     return new Promise((resolve, reject) => {
       const ret: HoggTupleNT[] = [];
-      const selectCfg = {}
+      const selectCfg = {};
       if (!offsetCount.getAll) {
         const maxRecords = offsetCount.offset + offsetCount.count;
         if (maxRecords > 0) {
@@ -78,17 +77,16 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
         selectCfg.filterByFormula = this.pFilterVusc;
       }
       let counter = 0;
-      Airtable
-        .base(this.dbName)
+      Airtable.base(this.dbName)
         .table(this.tableName)
         .select(selectCfg)
         .eachPage(
           function page(records, fetchNextPage) {
-            records.forEach(function (record) {
+            records.forEach(function(record) {
               counter++;
               if (counter > offsetCount.offset) {
                 const tup = HoggConnectionAirtable.convertRecord(record);
-                ret.push(tup)
+                ret.push(tup);
               }
             });
             fetchNextPage();
@@ -96,24 +94,24 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
           function done(err) {
             if (err) {
               console.error(err);
-              reject(err)
+              reject(err);
             }
-            resolve(ret)
+            resolve(ret);
           }
-        )
+        );
     });
   }
 
   init(options: { apiKey: string }): void {
-    const {apiKey} = options;
+    const { apiKey } = options;
     this.nxApiKey = apiKey;
     if (apiKey) {
-      const dc = Airtable.default_config()
-      dc.apiKey = apiKey
-      dc.endpointUrl = 'https://api.airtable.com'
-      Airtable.configure(dc)
+      const dc = Airtable.default_config();
+      dc.apiKey = apiKey;
+      dc.endpointUrl = 'https://api.airtable.com';
+      Airtable.configure(dc);
     } else {
-      throw new Error(`[hogg]: [[210223092909]] invalid apiKey [${apiKey}]`)
+      throw new Error(`[hogg]: [[210223092909]] invalid apiKey [${apiKey}]`);
     }
   }
 
@@ -123,134 +121,148 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
    */
   async update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>> {
     if (!(tuples && tuples.length > 0)) {
-      return new HoggResult<boolean>(false, '[[210223170254]]', 'tuples is empty')
+      return new HoggResult<boolean>(
+        false,
+        '[[210223170254]]',
+        'tuples is empty'
+      );
     } else {
       // ---
-      const {updConfs, isOk} = updConfsGet(tuples);
+      const { updConfs, isOk } = updConfsGet(tuples);
       // ---
       if (!isOk) {
-        return new HoggResult(false, '[[210223191902]]', 'tid problem')
+        return new HoggResult(false, '[[210223191902]]', 'tid problem');
       }
       try {
-        return new Promise((resolve) => {
-          Airtable
-            .base(this.dbName)
+        return new Promise(resolve => {
+          Airtable.base(this.dbName)
             .table(this.tableName)
             .update(updConfs, (err: any) => {
               if (err) {
-                resolve(new HoggResult(false, '[[210223202024]]', err.message))
+                resolve(new HoggResult(false, '[[210223202024]]', err.message));
               } else {
-                resolve(new HoggResult<boolean>(true))
+                resolve(new HoggResult<boolean>(true));
               }
-            })
+            });
         });
       } catch (e) {
-        return new HoggResult<boolean>(false, '[[210223193709]]', e.message)
+        return new HoggResult<boolean>(false, '[[210223193709]]', e.message);
       }
     }
   }
 
   async create(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>> {
     if (!(tuples && tuples.length > 0)) {
-      return new HoggResult<boolean>(false, '[[210223170254-2]]', 'tuples is empty')
+      return new HoggResult<boolean>(
+        false,
+        '[[210223170254-2]]',
+        'tuples is empty'
+      );
     } else {
       // ---
       const createData = updConfsAtCreateGet(tuples);
       // ---
       try {
-        await Airtable
-          .base(this.dbName)
+        await Airtable.base(this.dbName)
           .table(this.tableName)
-          .create(createData, function (err: any) {
+          .create(createData, function(err: any) {
             if (err) {
-              return new HoggResult(false, '[[210223202024-2]]', err.message)
+              return new HoggResult(false, '[[210223202024-2]]', err.message);
             }
-            return new HoggResult<boolean>(true)
-          })
-        return new HoggResult<boolean>(true)
+            return new HoggResult<boolean>(true);
+          });
+        return new HoggResult<boolean>(true);
       } catch (e) {
-        return new HoggResult<boolean>(false, '[[210223193709-2]]', e.message)
+        return new HoggResult<boolean>(false, '[[210223193709-2]]', e.message);
       }
     }
   }
 
   async delete(ids: string[]): Promise<HoggResult<boolean>> {
-    await Airtable
-      .base(this.dbName)
+    await Airtable.base(this.dbName)
       .table(this.tableName)
-      .destroy(ids, function (err: any) {
+      .destroy(ids, function(err: any) {
         if (err) {
-          return new HoggResult(false, '[[210223202024-3]]', err.message)
+          return new HoggResult(false, '[[210223202024-3]]', err.message);
         }
-        return new HoggResult(true)
-      })
-    return new HoggResult(true)
+        return new HoggResult(true);
+      });
+    return new HoggResult(true);
   }
 
   // see https://airtable.com/api/meta
   async dbInfoGet(dbName: string): Promise<HoggDbInfoNT | HoggErr> {
-    const res = await fetch(`https://api.airtable.com/v0/meta/bases/${dbName}/tables`, {
-      headers: {
-        'Authorization': `Bearer ${this.nxApiKey}`
+    const res = await fetch(
+      `https://api.airtable.com/v0/meta/bases/${dbName}/tables`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.nxApiKey}`,
+        },
       }
-    })
+    );
     if (res.ok) {
       try {
-        const oj = res.json()
+        const oj = res.json();
         // @ts-ignore
         if (oj.tables) {
           // @ts-ignore
-          const tables = oj.tables.map((table) => {
+          const tables = oj.tables.map(table => {
             // @ts-ignore
-            const fields = table.fields.map((field) => {
-              return new HoggBaseFieldInfo(field.name)
-            })
-            return new HoggBaseTableInfo(table.name, fields)
-          })
-          return new HoggBaseDbInfo(dbName, tables)
+            const fields = table.fields.map(field => {
+              return new HoggBaseFieldInfo(field.name);
+            });
+            return new HoggBaseTableInfo(table.name, fields);
+          });
+          return new HoggBaseDbInfo(dbName, tables);
         }
       } catch (e) {
-        return new HoggErr('210414102201', e.message)
+        return new HoggErr('210414102201', e.message);
       }
     }
-    return new HoggErr('210414102200', `res.ok is falsy; status [${res.status}]; message [${res.statusText}]`)
+    return new HoggErr(
+      '210414102200',
+      `res.ok is falsy; status [${res.status}]; message [${res.statusText}]`
+    );
   }
-
 }
 
 function updConfsGet(tuples: HoggTupleNT[]) {
   const updConfs: any[] = [];
-  const isOk = tuples.every(tuple => { // LOOP
+  const isOk = tuples.every(tuple => {
+    // LOOP
     const cells: HoggCellNT[] = tuple.cellsGet();
-    const updConf: any = {id: '', fields: {}}
-    cells.forEach(cell => { // LOOP-2
-      const fieldName = cell.columnNameGet()
+    const updConf: any = { id: '', fields: {} };
+    cells.forEach(cell => {
+      // LOOP-2
+      const fieldName = cell.columnNameGet();
       if (fieldName === 'tid') {
         updConf.id = cell.valueGet();
       } else {
-        updConf.fields[fieldName] = cell.valueGet()
+        updConf.fields[fieldName] = cell.valueGet();
       }
-    }) // LOOP-2
+    }); // LOOP-2
     if (!updConf.id) {
       return false; // stop loop
     }
     updConfs.push(updConf);
     return true;
-  }) // LOOP
-  return {updConfs, isOk};
+  }); // LOOP
+  return { updConfs, isOk };
 }
 
 function updConfsAtCreateGet(tuples: HoggTupleNT[]) {
   const updConfs: any[] = [];
-  tuples.forEach(tuple => { // LOOP
+  tuples.forEach(tuple => {
+    // LOOP
     const cells: HoggCellNT[] = tuple.cellsGet();
-    const updConf: any = {fields: {}}
-    cells.forEach(cell => { // LOOP-2
-      const fieldName = cell.columnNameGet()
-      updConf.fields[fieldName] = cell.valueGet()
-    }) // LOOP-2
+    const updConf: any = { fields: {} };
+    cells.forEach(cell => {
+      // LOOP-2
+      const fieldName = cell.columnNameGet();
+      updConf.fields[fieldName] = cell.valueGet();
+    }); // LOOP-2
     updConfs.push(updConf);
     return true;
-  }) // LOOP
+  }); // LOOP
   return updConfs;
 }

@@ -17,5 +17,4 @@ export class BaseCell implements HoggCellNT {
   valueGet(): string {
     return this.value;
   }
-
 }
