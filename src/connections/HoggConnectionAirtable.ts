@@ -7,7 +7,12 @@ import { BaseTuple } from '../base-implements/BaseTuple';
 import { BaseCell } from '../base-implements/BaseCell';
 import { HoggOffsetCount } from '../utils/HoggOffsetCount';
 import { HoggResult } from '../utils/HoggResult';
-
+import HoggDbInfoNT from '../interfaces/HoggDbInfoNT';
+import 'isomorphic-fetch';
+import HoggBaseTableInfo from '../base-implements/HoggBaseTableInfo';
+import HoggBaseFieldInfo from '../base-implements/HoggBaseFieldInfo';
+import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
+import { HoggErr } from '../utils/HoggErr';
 
 export class HoggConnectionAirtable implements HoggConnectionNT {
 
@@ -16,6 +21,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   private tableName: string = '';
   // [vusc]
   private pFilterVusc: string = '';
+  private nxApiKey?: string;
 
   db(dbName: string): HoggConnectionNT {
     this.dbName = dbName;
@@ -100,6 +106,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
 
   init(options: { apiKey: string }): void {
     const {apiKey} = options;
+    this.nxApiKey = apiKey;
     if (apiKey) {
       const dc = Airtable.default_config()
       dc.apiKey = apiKey
@@ -178,6 +185,35 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
         return new HoggResult(true)
       })
     return new HoggResult(true)
+  }
+
+  // see https://airtable.com/api/meta
+  async dbInfoGet(dbName: string): Promise<HoggDbInfoNT | HoggErr> {
+    const res = await fetch(`https://api.airtable.com/v0/meta/bases/${dbName}/tables`, {
+      headers: {
+        'Authorization': `Bearer ${this.nxApiKey}`
+      }
+    })
+    if (res.ok) {
+      try {
+        const oj = res.json()
+        // @ts-ignore
+        if (oj.tables) {
+          // @ts-ignore
+          const tables = oj.tables.map((table) => {
+            // @ts-ignore
+            const fields = table.fields.map((field) => {
+              return new HoggBaseFieldInfo(field.name)
+            })
+            return new HoggBaseTableInfo(table.name, fields)
+          })
+          return new HoggBaseDbInfo(dbName, tables)
+        }
+      } catch (e) {
+        return new HoggErr('210414102201', e.message)
+      }
+    }
+    return new HoggErr('210414102200', `res.ok is falsy; status [${res.status}]; message [${res.statusText}]`)
   }
 
 }
