@@ -10,4 +10,4 @@ export { BaseTuple } from './base-implements/BaseTuple';
 export { HoggResult } from './utils/HoggResult';
 export { HoggOffsetCount } from './utils/HoggOffsetCount';
 export { HoggErr } from './utils/HoggErr';
-export { columnNamesFrom } from './utils/hogg_utils';
+export * from './utils/hogg_utils';
