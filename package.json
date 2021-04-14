@@ -1,8 +1,9 @@
 {
-  "version": "0.5.0",
+  "version": "0.5.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "repository": "https://github.com/surrsoft/hogg-lib",
   "files": [
     "dist",
     "src"
@@ -17,7 +18,8 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "publish": "npm publish"
   },
   "peerDependencies": {},
   "husky": {
