@@ -1,5 +1,5 @@
 {
-  "version": "0.2.7",
+  "version": "0.3.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "hogg-lib-tsdx",
+  "name": "hogg-lib",
   "author": "Evgeny Barannikov",
   "module": "dist/hogg-lib-tsdx.esm.js",
   "size-limit": [
