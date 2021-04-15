@@ -2,7 +2,7 @@ import { HoggTupleNT } from './HoggTupleNT';
 import { HoggOffsetCount } from '../utils/HoggOffsetCount';
 import { HoggResult } from '../utils/HoggResult';
 import HoggDbInfoNT from './HoggDbInfoNT';
-import { HoggErr } from '../utils/HoggErr';
+import { RsuvErr } from 'rsuv-lib';
 
 export interface HoggConnectionNT {
   db(dbName: string): HoggConnectionNT;
@@ -40,5 +40,5 @@ export interface HoggConnectionNT {
 
   delete(ids: string[]): Promise<HoggResult<boolean>>;
 
-  dbInfoGet(dbName: string): Promise<HoggDbInfoNT | HoggErr>;
+  dbInfoGet(dbName: string): Promise<HoggDbInfoNT | RsuvErr>;
 }

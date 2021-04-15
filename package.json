@@ -1,5 +1,5 @@
 {
-  "version": "0.5.2",
+  "version": "0.7.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -18,7 +18,8 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "nx-install": "yarn add rsuv-lib"
   },
   "peerDependencies": {},
   "husky": {
@@ -59,7 +60,11 @@
   "dependencies": {
     "@types/isomorphic-fetch": "^0.0.35",
     "airtable": "^0.10.1",
-    "isomorphic-fetch": "^3.0.0"
+    "isomorphic-fetch": "^3.0.0",
+    "rsuv-lib": "^0.4.2"
   },
-  "keywords": ["database", "airtable"]
+  "keywords": [
+    "database",
+    "airtable"
+  ]
 }

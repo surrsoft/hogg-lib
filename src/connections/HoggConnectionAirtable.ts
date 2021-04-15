@@ -12,7 +12,7 @@ import 'isomorphic-fetch';
 import HoggBaseTableInfo from '../base-implements/HoggBaseTableInfo';
 import HoggBaseFieldInfo from '../base-implements/HoggBaseFieldInfo';
 import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
-import { HoggErr } from '../utils/HoggErr';
+import { RsuvErr } from 'rsuv-lib';
 
 export class HoggConnectionAirtable implements HoggConnectionNT {
   private dbName: string = '';
@@ -191,7 +191,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   }
 
   // see https://airtable.com/api/meta
-  async dbInfoGet(dbName: string): Promise<HoggDbInfoNT | HoggErr> {
+  async dbInfoGet(dbName: string): Promise<HoggDbInfoNT | RsuvErr> {
     const res = await fetch(
       `https://api.airtable.com/v0/meta/bases/${dbName}/tables`,
       {
@@ -216,10 +216,10 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
           return new HoggBaseDbInfo(dbName, tables);
         }
       } catch (e) {
-        return new HoggErr('210414102201', e.message);
+        return new RsuvErr('210414102201', e.message);
       }
     }
-    return new HoggErr(
+    return new RsuvErr(
       '210414102200',
       `res.ok is falsy; status [${res.status}]; message [${res.statusText}]`
     );

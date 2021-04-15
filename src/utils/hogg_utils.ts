@@ -1,17 +1,19 @@
 import { HoggTupleNT } from '../interfaces/HoggTupleNT';
 import { BaseCell } from '../base-implements/BaseCell';
 import { BaseTuple } from '../base-implements/BaseTuple';
+import { RsuvValueAnd } from 'rsuv-lib';
 
 /**
  * Получить из tuple (1) значение ячейки с именем (2)
  * @param tuple (1) --
  * @param columnName (2) --
+ * @return HoggValueAnd если колонки (2) в (1) нет, то у возвращаемого объекта поле isValueExist будет FALSE
  */
-export const tupleCellValue = (tuple: HoggTupleNT, columnName: string): string => {
+export const tupleCellValue = (tuple: HoggTupleNT, columnName: string): RsuvValueAnd => {
   const cell = tuple.cellsGet().find((cell) => {
     return cell.columnNameGet() === columnName
   })
-  return cell ? cell.valueGet() : ''
+  return cell ? new RsuvValueAnd(cell.valueGet()) : new RsuvValueAnd('', false)
 }
 
 /**
