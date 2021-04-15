@@ -1,5 +1,5 @@
 {
-  "version": "0.14.2",
+  "version": "0.14.3",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -19,7 +19,8 @@
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "nx-install": "yarn add rsuv-lib"
+    "nx-install": "yarn add rsuv-lib",
+    "nx-publish": "npm publish"
   },
   "peerDependencies": {},
   "husky": {
