@@ -42,20 +42,33 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
     return this;
   }
 
-  private static convertRecord(record: Record): HoggTupleNT {
-    const { fields } = record;
-    const cees: HoggCellNT[] = [];
+  private static convertRecord(record: Record, columnNames: string[]): HoggTupleNT {
+    const {fields} = record;
+    const cells: HoggCellNT[] = [];
     for (const [key, value] of Object.entries(fields)) {
-      const cee: HoggCellNT = new BaseCell().create(key, value as string);
-      cees.push(cee);
+      if (columnNames.includes(key)) {
+        const cell: HoggCellNT = new BaseCell().create(key, value as string);
+        cells.push(cell);
+      }
     }
-    const tidCee = new BaseCell().create('tid', record.id);
-    cees.push(tidCee);
-    return new BaseTuple().create(cees);
+    // --- tid
+    const tidCell = new BaseCell().create('tid', record.id);
+    cells.push(tidCell);
+    // --- добавление недостающих
+    columnNames.forEach((columnName) => {
+      const exist = cells.find(cell => cell.columnNameGet() === columnName)
+      if (!exist) {
+        const cell0 = new BaseCell().create(columnName, '')
+        cells.push(cell0)
+      }
+    })
+    // ---
+    return new BaseTuple().create(cells);
   }
 
   // TODO учесть columnNames
   async query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]> {
+    const columnNames = this.columnNames
     return new Promise((resolve, reject) => {
       const ret: HoggTupleNT[] = [];
       const selectCfg = {};
@@ -82,10 +95,10 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
         .select(selectCfg)
         .eachPage(
           function page(records, fetchNextPage) {
-            records.forEach(function(record) {
+            records.forEach(function (record) {
               counter++;
               if (counter > offsetCount.offset) {
-                const tup = HoggConnectionAirtable.convertRecord(record);
+                const tup = HoggConnectionAirtable.convertRecord(record, columnNames);
                 ret.push(tup);
               }
             });
@@ -103,7 +116,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   }
 
   init(options: { apiKey: string }): void {
-    const { apiKey } = options;
+    const {apiKey} = options;
     this.nxApiKey = apiKey;
     if (apiKey) {
       const dc = Airtable.default_config();
@@ -128,7 +141,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
       );
     } else {
       // ---
-      const { updConfs, isOk } = updConfsGet(tuples);
+      const {updConfs, isOk} = updConfsGet(tuples);
       // ---
       if (!isOk) {
         return new HoggResult(false, '[[210223191902]]', 'tid problem');
@@ -165,7 +178,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
       try {
         await Airtable.base(this.dbName)
           .table(this.tableName)
-          .create(createData, function(err: any) {
+          .create(createData, function (err: any) {
             if (err) {
               return new HoggResult(false, '[[210223202024-2]]', err.message);
             }
@@ -181,7 +194,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   async delete(ids: string[]): Promise<HoggResult<boolean>> {
     await Airtable.base(this.dbName)
       .table(this.tableName)
-      .destroy(ids, function(err: any) {
+      .destroy(ids, function (err: any) {
         if (err) {
           return new HoggResult(false, '[[210223202024-3]]', err.message);
         }
@@ -231,7 +244,7 @@ function updConfsGet(tuples: HoggTupleNT[]) {
   const isOk = tuples.every(tuple => {
     // LOOP
     const cells: HoggCellNT[] = tuple.cellsGet();
-    const updConf: any = { id: '', fields: {} };
+    const updConf: any = {id: '', fields: {}};
     cells.forEach(cell => {
       // LOOP-2
       const fieldName = cell.columnNameGet();
@@ -247,7 +260,7 @@ function updConfsGet(tuples: HoggTupleNT[]) {
     updConfs.push(updConf);
     return true;
   }); // LOOP
-  return { updConfs, isOk };
+  return {updConfs, isOk};
 }
 
 function updConfsAtCreateGet(tuples: HoggTupleNT[]) {
@@ -255,7 +268,7 @@ function updConfsAtCreateGet(tuples: HoggTupleNT[]) {
   tuples.forEach(tuple => {
     // LOOP
     const cells: HoggCellNT[] = tuple.cellsGet();
-    const updConf: any = { fields: {} };
+    const updConf: any = {fields: {}};
     cells.forEach(cell => {
       // LOOP-2
       const fieldName = cell.columnNameGet();

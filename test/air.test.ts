@@ -1,8 +1,8 @@
 import { HoggConnectionAirtable, HoggOffsetCount } from '../src';
-import { columnNamesFrom } from '../src';
+import { airtableApiKey } from '../src/config-nx';
 
 const air = new HoggConnectionAirtable();
-air.init({ apiKey: 'zzz' });
+air.init({apiKey: airtableApiKey});
 
 describe('airtable', () => {
   it('info', async () => {
@@ -12,19 +12,15 @@ describe('airtable', () => {
 
   it('query', async () => {
     const tuples = await air
-      .db('zzz')
+      .db('appXv6ry7Vn262nGR')
       .table('main')
+      .columns(['id', 'title', 'body', 'url', 'comm', 'trans_count', 'trans_date_last', 'show_date_last'])
       .query(new HoggOffsetCount(false, 3, 3));
-
-    const columnNames = columnNamesFrom(tuples);
-    console.log('!!-!!-!! 1435-10 columnNames {210414120923}\n', columnNames);
 
     console.log(
       '!!-!!-!! 1435-20 tuples {210414143637}\n',
       JSON.stringify(tuples, null, 2)
     );
 
-    const nx = JSON.stringify(tuples);
-    console.log('!!-!!-!! 1435-30 nx {210414143949}\n', nx);
   });
 });
