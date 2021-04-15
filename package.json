@@ -60,5 +60,6 @@
     "@types/isomorphic-fetch": "^0.0.35",
     "airtable": "^0.10.1",
     "isomorphic-fetch": "^3.0.0"
-  }
+  },
+  "keywords": ["database", "airtable"]
 }

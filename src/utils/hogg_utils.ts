@@ -7,7 +7,7 @@ import { BaseTuple } from '../base-implements/BaseTuple';
  * @param tuple (1) --
  * @param columnName (2) --
  */
-export const cellValue = (tuple: HoggTupleNT, columnName: string): string => {
+export const tupleCellValue = (tuple: HoggTupleNT, columnName: string): string => {
   const cell = tuple.cellsGet().find((cell) => {
     return cell.columnNameGet() === columnName
   })
