@@ -60,7 +60,6 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     return new BaseTuple().create(cells);
   }
 
-  // TODO учесть columnNames
   async query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]> {
     const columnNames = this.columnNames
     return new Promise((resolve, reject) => {
