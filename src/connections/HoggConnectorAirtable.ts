@@ -1,4 +1,4 @@
-import { HoggConnectionNT } from '../interfaces/HoggConnectionNT';
+import { HoggConnectorNT } from '../interfaces/HoggConnectorNT';
 import { HoggTupleNT } from '../interfaces/HoggTupleNT';
 import Airtable from 'airtable';
 import Record from 'airtable/lib/record';
@@ -14,7 +14,7 @@ import HoggBaseFieldInfo from '../base-implements/HoggBaseFieldInfo';
 import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
 import { RsuvErr } from 'rsuv-lib';
 
-export class HoggConnectionAirtable implements HoggConnectionNT {
+export class HoggConnectorAirtable implements HoggConnectorNT {
   private dbName: string = '';
   private columnNames: string[] = [];
   private tableName: string = '';
@@ -22,22 +22,22 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
   private pFilterVusc: string = '';
   private nxApiKey?: string;
 
-  db(dbName: string): HoggConnectionNT {
+  db(dbName: string): HoggConnectorNT {
     this.dbName = dbName;
     return this;
   }
 
-  table(tableName: string): HoggConnectionNT {
+  table(tableName: string): HoggConnectorNT {
     this.tableName = tableName;
     return this;
   }
 
-  columns(columnNames: string[]): HoggConnectionNT {
+  columns(columnNames: string[]): HoggConnectorNT {
     this.columnNames = columnNames;
     return this;
   }
 
-  filterVusc(filter: string): HoggConnectionNT {
+  filterVusc(filter: string): HoggConnectorNT {
     this.pFilterVusc = filter;
     return this;
   }
@@ -92,7 +92,7 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
             records.forEach(function (record) {
               counter++;
               if (counter > offsetCount.offset) {
-                const tup = HoggConnectionAirtable.convertRecord(record, columnNames);
+                const tup = HoggConnectorAirtable.convertRecord(record, columnNames);
                 ret.push(tup);
               }
             });

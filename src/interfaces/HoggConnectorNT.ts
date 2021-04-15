@@ -4,23 +4,23 @@ import { HoggResult } from '../utils/HoggResult';
 import HoggDbInfoNT from './HoggDbInfoNT';
 import { RsuvErr } from 'rsuv-lib';
 
-export interface HoggConnectionNT {
-  db(dbName: string): HoggConnectionNT;
+export interface HoggConnectorNT {
+  db(dbName: string): HoggConnectorNT;
 
-  table(tableName: string): HoggConnectionNT;
+  table(tableName: string): HoggConnectorNT;
 
   /**
-   * Имена столбцов значения которых необходимо получить. Если пустой массив, то подразумевается необходимость
-   * получить значения всех столбцов
+   * Имена столбцов значения которых необходимо получить. *К-имплемент гарантированно должен возвращать указанные здесь
+   * колонки, даже если какой-либо колонки нет в *источнике
    * @param columnNames (1) -- например ['name', 'order'] или []
    */
-  columns(columnNames: string[]): HoggConnectionNT;
+  columns(columnNames: string[]): HoggConnectorNT;
 
   /**
    * [vusc]
    * @param filter
    */
-  filterVusc(filter: string): HoggConnectionNT;
+  filterVusc(filter: string): HoggConnectorNT;
 
   /**
    * Некоторым *источникам может требоваться инициализация, этот метод для этого

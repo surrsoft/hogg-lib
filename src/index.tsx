@@ -1,7 +1,7 @@
-export { HoggConnectionAirtable } from './connections/HoggConnectionAirtable';
+export { HoggConnectorAirtable } from './connections/HoggConnectorAirtable';
 
 export { HoggCellNT } from './interfaces/HoggCellNT';
-export { HoggConnectionNT } from './interfaces/HoggConnectionNT';
+export { HoggConnectorNT } from './interfaces/HoggConnectorNT';
 export { HoggTupleNT } from './interfaces/HoggTupleNT';
 
 export { BaseCell } from './base-implements/BaseCell';

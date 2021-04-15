@@ -1,7 +1,7 @@
-import { HoggConnectionAirtable, HoggOffsetCount } from '../src';
+import { HoggConnectorAirtable, HoggOffsetCount } from '../src';
 import { airtableApiKey } from '../src/config-nx';
 
-const air = new HoggConnectionAirtable();
+const air = new HoggConnectorAirtable();
 air.init({apiKey: airtableApiKey});
 
 describe('airtable', () => {
