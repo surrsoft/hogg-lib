@@ -17,6 +17,25 @@ export const tupleCellValue = (tuple: HoggTupleNT, columnName: string): RsuvValu
 }
 
 /**
+ * Итоговый tuple будет иметь ячейки с именами перечисленными в (2) и соответствующими значениями из (1). Если в (1) нет ячейки с
+ * именем (2) то в итоговый tuple ячейка всё равно будет добавлена, но со значением '' (пустая строка)
+ * @param tuple (1) --
+ * @param columnNames (2) --
+ * @return tuple
+ */
+export const tupleAdapt = (tuple: HoggTupleNT, columnNames: string[]): HoggTupleNT => {
+  const cells = columnNames.map((columnName) => {
+    const nx = tupleCellValue(tuple, columnName)
+    if (nx.isValueExist) {
+      return new BaseCell().create(columnName, nx.value)
+    } else {
+      return new BaseCell().create(columnName, '')
+    }
+  })
+  return new BaseTuple().create(cells)
+}
+
+/**
  * Возвращает список уникальынх имён столбцов встречающихся в tuples (1)
  * @param tuples (1) --
  */
