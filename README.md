@@ -1,5 +1,4 @@
-* [[hogg]] - универсальное отражение реляционной БД
-* on base `tsdx` https://github.com/formium/tsdx
+Универсальное отражение реляционной БД
 
 # Как использовать
 * пример
@@ -34,5 +33,6 @@
 * поудалять `// del+`
 
 # Ссылки
+* https://github.com/formium/tsdx
 * https://itnext.io/testing-with-jest-in-typescript-cc1cd0095421 - 'Testing with jest in TypeScript'
 
