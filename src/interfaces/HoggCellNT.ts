@@ -4,4 +4,6 @@ export interface HoggCellNT {
   columnNameGet(): string;
 
   valueGet(): string;
+
+  valueSet(value: string): void;
 }

@@ -44,24 +44,18 @@ export class HoggConnectionAirtable implements HoggConnectionNT {
 
   private static convertRecord(record: Record, columnNames: string[]): HoggTupleNT {
     const {fields} = record;
-    const cells: HoggCellNT[] = [];
+    const cells: HoggCellNT[] = columnNames.map((name) => {
+        return new BaseCell().create(name,  '')
+    })
     for (const [key, value] of Object.entries(fields)) {
-      if (columnNames.includes(key)) {
-        const cell: HoggCellNT = new BaseCell().create(key, value as string);
-        cells.push(cell);
+      const cellF = cells.find(cell => cell.columnNameGet() === key)
+      if (cellF) {
+        cellF.valueSet(value as string)
       }
     }
     // --- tid
     const tidCell = new BaseCell().create('tid', record.id);
     cells.push(tidCell);
-    // --- добавление недостающих
-    columnNames.forEach((columnName) => {
-      const exist = cells.find(cell => cell.columnNameGet() === columnName)
-      if (!exist) {
-        const cell0 = new BaseCell().create(columnName, '')
-        cells.push(cell0)
-      }
-    })
     // ---
     return new BaseTuple().create(cells);
   }
