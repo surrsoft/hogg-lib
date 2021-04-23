@@ -22,6 +22,9 @@
   const tuples: HoggTupleNT[] = await conn.query(new HoggOffsetCount(true))
 ```
 
+# Технологии
+* TypeScript, JavaScript
+
 # Понятия
 * *источник, *data-source - источных данных
 * *к-имплемент, *коннектор - сущность имплементирующая интерфейс HoggConnectorNT, например HoggConnectorAirtable()
