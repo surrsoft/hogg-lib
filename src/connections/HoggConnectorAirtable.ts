@@ -64,6 +64,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     const columnNames = this.columnNames
     return new Promise((resolve, reject) => {
       const ret: HoggTupleNT[] = [];
+      // --- selectCfg
       const selectCfg = {};
       if (!offsetCount.getAll) {
         const maxRecords = offsetCount.offset + offsetCount.count;
@@ -82,6 +83,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
         // @ts-ignore
         selectCfg.filterByFormula = this.pFilterVusc;
       }
+      // ---
       let counter = 0;
       Airtable.base(this.dbName)
         .table(this.tableName)
