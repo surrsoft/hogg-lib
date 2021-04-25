@@ -23,4 +23,18 @@ describe('airtable', () => {
     );
 
   });
+
+  it('queryOneById', async () => {
+    const tuple = await air
+      .db('app0z4PLV15OpHHzo')
+      .table('cards')
+      .columns(['name', 'scopes'])
+      .queryOneById('recjDazYB0ialZ10e');
+
+    console.log(
+      '!!-!!-!! 1435-20 tuple {210414143637}\n',
+      JSON.stringify(tuple, null, 2)
+    );
+
+  });
 });

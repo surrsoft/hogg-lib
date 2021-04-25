@@ -34,6 +34,8 @@ export interface HoggConnectorNT {
    */
   query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]>;
 
+  queryOneById(id: string): Promise<HoggTupleNT | RsuvErr>;
+
   update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;
 
   create(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;

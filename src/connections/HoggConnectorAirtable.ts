@@ -66,6 +66,19 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     return new BaseTuple().create(cells);
   }
 
+  init(options: { apiKey: string }): void {
+    const {apiKey} = options;
+    this.nxApiKey = apiKey;
+    if (apiKey) {
+      const dc = Airtable.default_config();
+      dc.apiKey = apiKey;
+      dc.endpointUrl = 'https://api.airtable.com';
+      Airtable.configure(dc);
+    } else {
+      throw new Error(`[hogg]: [[210223092909]] invalid apiKey [${apiKey}]`);
+    }
+  }
+
   async query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]> {
     const columnNames = this.columnNames
     return new Promise((resolve, reject) => {
@@ -116,17 +129,29 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     });
   }
 
-  init(options: { apiKey: string }): void {
-    const {apiKey} = options;
-    this.nxApiKey = apiKey;
-    if (apiKey) {
-      const dc = Airtable.default_config();
-      dc.apiKey = apiKey;
-      dc.endpointUrl = 'https://api.airtable.com';
-      Airtable.configure(dc);
-    } else {
-      throw new Error(`[hogg]: [[210223092909]] invalid apiKey [${apiKey}]`);
-    }
+  queryOneById(id: string): Promise<HoggTupleNT | RsuvErr> {
+    const columnNames = this.columnNames
+    return new Promise((resolve) => {
+      Airtable
+        .base(this.dbName)
+        .table(this.tableName)
+        .find(id, (err, record) => {
+          if (err) {
+            if (err.error === 'NOT_FOUND') {
+              resolve(new RsuvErr('NOT_FOUND', `${err.error}; ${err.message}; 210425225000`))
+            } else {
+              resolve(new RsuvErr('210425223700', `${err.error}; ${err.message}`))
+            }
+          } else {
+            if (record) {
+              const tup = HoggConnectorAirtable.convertRecord(record, columnNames);
+              resolve(tup)
+            } else {
+              resolve(new RsuvErr('210425223701', 'record is falsy'))
+            }
+          }
+        })
+    });
   }
 
   /**
