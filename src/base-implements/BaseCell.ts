@@ -3,10 +3,17 @@ import { HoggCellNT } from '../interfaces/HoggCellNT';
 export class BaseCell implements HoggCellNT {
   private columnName: string = '';
   private value: string = '';
+  private values: string[] = [];
 
   create(columnName: string, value: string): HoggCellNT {
     this.columnName = columnName;
     this.value = value;
+    return this;
+  }
+
+  createB(columnName: string, values: string[]): HoggCellNT {
+    this.columnName = columnName;
+    this.values = values;
     return this;
   }
 
@@ -20,5 +27,13 @@ export class BaseCell implements HoggCellNT {
 
   valueSet(value: string) {
     this.value = value;
+  }
+
+  valuesGet(): string[] {
+    return this.values;
+  }
+
+  valuesSet(values: string[]): void {
+    this.values = values
   }
 }

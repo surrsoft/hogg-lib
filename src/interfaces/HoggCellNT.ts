@@ -5,5 +5,9 @@ export interface HoggCellNT {
 
   valueGet(): string;
 
+  valuesGet(): string[];
+
   valueSet(value: string): void;
+
+  valuesSet(values: string[]): void;
 }

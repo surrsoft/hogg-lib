@@ -14,8 +14,8 @@ describe('airtable', () => {
     const tuples = await air
       .db('app0z4PLV15OpHHzo')
       .table('cards')
-      .columns(['name'])
-      .query(new HoggOffsetCount(false, 3, 2));
+      .columns(['scopes'])
+      .query(new HoggOffsetCount(true));
 
     console.log(
       '!!-!!-!! 1435-20 tuples {210414143637}\n',

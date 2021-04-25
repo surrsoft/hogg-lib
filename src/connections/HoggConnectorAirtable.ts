@@ -45,12 +45,17 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
   private static convertRecord(record: Record<FieldSet>, columnNames: string[]): HoggTupleNT {
     const {fields} = record;
     const cells: HoggCellNT[] = columnNames.map((name) => {
-        return new BaseCell().create(name,  '')
+      return new BaseCell().create(name, '')
     })
     for (const [key, value] of Object.entries(fields)) {
       const cellF = cells.find(cell => cell.columnNameGet() === key)
       if (cellF) {
-        cellF.valueSet(value as string)
+        const isArray = Array.isArray(value)
+        if (isArray) {
+          cellF.valuesSet(value as string[])
+        } else {
+          cellF.valueSet(value as string)
+        }
       }
     }
     // --- tid
