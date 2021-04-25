@@ -1,6 +1,6 @@
 import { HoggConnectorNT } from '../interfaces/HoggConnectorNT';
 import { HoggTupleNT } from '../interfaces/HoggTupleNT';
-import Airtable from 'airtable';
+import Airtable, { FieldSet } from 'airtable';
 import Record from 'airtable/lib/record';
 import { HoggCellNT } from '../interfaces/HoggCellNT';
 import { BaseTuple } from '../base-implements/BaseTuple';
@@ -42,7 +42,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     return this;
   }
 
-  private static convertRecord(record: Record, columnNames: string[]): HoggTupleNT {
+  private static convertRecord(record: Record<FieldSet>, columnNames: string[]): HoggTupleNT {
     const {fields} = record;
     const cells: HoggCellNT[] = columnNames.map((name) => {
         return new BaseCell().create(name,  '')
