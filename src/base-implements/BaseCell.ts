@@ -4,6 +4,7 @@ export class BaseCell implements HoggCellNT {
   private columnName: string = '';
   private value: string = '';
   private values: string[] = [];
+  private fIsArray: boolean = false
 
   create(columnName: string, value: string): HoggCellNT {
     this.columnName = columnName;
@@ -35,5 +36,13 @@ export class BaseCell implements HoggCellNT {
 
   valuesSet(values: string[]): void {
     this.values = values
+  }
+
+  isArray(): boolean {
+    return this.fIsArray
+  }
+
+  isArraySet(): void {
+    this.fIsArray = true
   }
 }

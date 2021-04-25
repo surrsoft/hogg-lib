@@ -53,6 +53,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
         const isArray = Array.isArray(value)
         if (isArray) {
           cellF.valuesSet(value as string[])
+          cellF.isArraySet()
         } else {
           cellF.valueSet(value as string)
         }

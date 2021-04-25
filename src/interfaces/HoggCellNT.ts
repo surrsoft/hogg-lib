@@ -10,4 +10,8 @@ export interface HoggCellNT {
   valueSet(value: string): void;
 
   valuesSet(values: string[]): void;
+
+  isArraySet(): void
+
+  isArray(): boolean
 }
