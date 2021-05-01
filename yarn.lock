@@ -7987,10 +7987,10 @@ rollup@^1.32.1:
     "@types/node" "*"
     acorn "^7.1.0"
 
-rsuv-lib@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/rsuv-lib/-/rsuv-lib-0.4.2.tgz#7939bff652824841274fa68dd626a5a75684d7fd"
-  integrity sha512-DKJpJGmEplHks3pWLp/i5MtS7LcfPnuEAl/pGhXEy/xvHxwkC1OYqN6B6yMZ31UEitb+iAyjhco3drQN/CvUIw==
+rsuv-lib@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/rsuv-lib/-/rsuv-lib-1.2.0.tgz#639cf7405fe9cca2cf00b88f379ea1c5f419fb0b"
+  integrity sha512-3g8qlvzPYH+hJ/rvyS2BQwwWV+o5kRdAyCR+FiFcDXMMr6auv4iCwmQ/J7kF9pGxolEZFmJfeFXgan4WYTGGAQ==
   dependencies:
     isomorphic-fetch "^3.0.0"
 

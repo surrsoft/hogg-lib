@@ -129,7 +129,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     });
   }
 
-  queryOneById(id: string): Promise<HoggTupleNT | RsuvErr> {
+  queryOneById(id: string): Promise<HoggTupleNT> {
     const columnNames = this.columnNames
     return new Promise((resolve) => {
       Airtable
@@ -138,16 +138,16 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
         .find(id, (err, record) => {
           if (err) {
             if (err.error === 'NOT_FOUND') {
-              resolve(new RsuvErr('NOT_FOUND', `${err.error}; ${err.message}; 210425225000`))
+              resolve(new BaseTuple().errSet(new RsuvErr('NOT_FOUND', `${err.error}; ${err.message}; 210425225000`)))
             } else {
-              resolve(new RsuvErr('210425223700', `${err.error}; ${err.message}`))
+              resolve(new BaseTuple().errSet(new RsuvErr('210425223700', `${err.error}; ${err.message}`)))
             }
           } else {
             if (record) {
               const tup = HoggConnectorAirtable.convertRecord(record, columnNames);
               resolve(tup)
             } else {
-              resolve(new RsuvErr('210425223701', 'record is falsy'))
+              resolve(new BaseTuple().errSet(new RsuvErr('210425223701', 'record is falsy')))
             }
           }
         })
