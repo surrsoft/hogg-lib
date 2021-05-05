@@ -29,7 +29,8 @@ describe('airtable', () => {
       .db('app0z4PLV15OpHHzo')
       .table('cards')
       .columns(['name', 'scopes'])
-      .queryOneById('recjDazYB0ialZ10e');
+      .sort([{field: 'binds_count', direction: 'desc'}])
+      .query(new HoggOffsetCount(false, 0, 3));
 
     console.log(
       '!!-!!-!! 1435-20 tuple {210414143637}\n',

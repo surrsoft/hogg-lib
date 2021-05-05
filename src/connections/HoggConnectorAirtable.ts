@@ -21,6 +21,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
   // [vusc]
   private pFilterVusc: string = '';
   private nxApiKey?: string;
+  private pSort?: { field: string; direction: "desc" | "asc" }[]
 
   db(dbName: string): HoggConnectorNT {
     this.dbName = dbName;
@@ -39,6 +40,11 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
 
   filterVusc(filter: string): HoggConnectorNT {
     this.pFilterVusc = filter;
+    return this;
+  }
+
+  sort(sort?: { field: string; direction: "desc" | "asc" }[]): HoggConnectorNT {
+    this.pSort = sort
     return this;
   }
 
@@ -101,6 +107,10 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
       if (this.pFilterVusc) {
         // @ts-ignore
         selectCfg.filterByFormula = this.pFilterVusc;
+      }
+      if (this.pSort) {
+        // @ts-ignore
+        selectCfg.sort = this.pSort;
       }
       // ---
       let counter = 0;

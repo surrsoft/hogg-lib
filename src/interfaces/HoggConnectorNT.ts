@@ -23,6 +23,12 @@ export interface HoggConnectorNT {
   filterVusc(filter: string): HoggConnectorNT;
 
   /**
+   *
+   * @param sort
+   */
+  sort(sort: {field: string, direction: 'desc' | 'asc'}[]): HoggConnectorNT
+
+  /**
    * Некоторым *источникам может требоваться инициализация, этот метод для этого
    * @param options
    */
