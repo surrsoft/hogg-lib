@@ -13,6 +13,7 @@ import HoggBaseTableInfo from '../base-implements/HoggBaseTableInfo';
 import HoggBaseFieldInfo from '../base-implements/HoggBaseFieldInfo';
 import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
 import { RsuvErr } from 'rsuv-lib';
+import { HoggResultB } from '../utils/HoggResultB';
 
 export class HoggConnectorAirtable implements HoggConnectorNT {
   private dbName: string = '';
@@ -200,29 +201,35 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     }
   }
 
-  async create(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>> {
+  /**
+   * Добавляет в хранилище записи (1). Возвращает массив id созданных записей.
+   *
+   * Ячейки из (1) представляющие массив значений, должны удовлетворять {@link HoggCellNT.isArray()} === true, а сами значения должны
+   * быть добвлены в ячейку методом {@link HoggCellNT#valuesSet()}
+   *
+   * @param tuples --
+   */
+  async create(tuples: HoggTupleNT[]): Promise<HoggResultB<string[]>> {
     if (!(tuples && tuples.length > 0)) {
-      return new HoggResult<boolean>(
-        false,
-        '[[210223170254-2]]',
-        'tuples is empty'
-      );
+      return new HoggResultB<string[]>(false, [], '[[220118134826]]', 'tuples is empty');
     } else {
       // ---
       const createData = updConfsAtCreateGet(tuples);
       // ---
       try {
-        await Airtable.base(this.dbName)
-          .table(this.tableName)
-          .create(createData, function (err: any) {
-            if (err) {
-              return new HoggResult(false, '[[210223202024-2]]', err.message);
-            }
-            return new HoggResult<boolean>(true);
-          });
-        return new HoggResult<boolean>(true);
-      } catch (e) {
-        return new HoggResult<boolean>(false, '[[210223193709-2]]', e.message);
+        return new Promise((resolve, reject) => {
+          Airtable.base(this.dbName)
+            .table(this.tableName)
+            .create(createData, function (error: any, records: any) {
+              if (error) {
+                reject(new HoggResultB<string[]>(false, [], '[[220118134914]]', error.message));
+              }
+              const ids = records.map((el: any) => (el.id ? el.id : ''))
+              resolve(new HoggResultB<string[]>(true, ids))
+            });
+        });
+      } catch (err) {
+        return new HoggResultB<string[]>(false, [], '[[220118135141]]', err.message);
       }
     }
   }
@@ -299,6 +306,10 @@ function updConfsGet(tuples: HoggTupleNT[]) {
   return {updConfs, isOk};
 }
 
+/**
+ * На базе формата (1) формирует Airtable-формат предназначенный для создания записи
+ * @param tuples
+ */
 function updConfsAtCreateGet(tuples: HoggTupleNT[]) {
   const updConfs: any[] = [];
   tuples.forEach(tuple => {
@@ -308,7 +319,11 @@ function updConfsAtCreateGet(tuples: HoggTupleNT[]) {
     cells.forEach(cell => {
       // LOOP-2
       const fieldName = cell.columnNameGet();
-      updConf.fields[fieldName] = cell.valueGet();
+      let val: string | string[] = cell.valueGet();
+      if (cell.isArray()) {
+        val = cell.valuesGet()
+      }
+      updConf.fields[fieldName] = val;
     }); // LOOP-2
     updConfs.push(updConf);
     return true;

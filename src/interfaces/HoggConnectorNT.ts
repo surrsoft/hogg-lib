@@ -3,6 +3,7 @@ import { HoggOffsetCount } from '../utils/HoggOffsetCount';
 import { HoggResult } from '../utils/HoggResult';
 import HoggDbInfoNT from './HoggDbInfoNT';
 import { RsuvErr } from 'rsuv-lib';
+import { HoggResultB } from '../utils/HoggResultB';
 
 export interface HoggConnectorNT {
   db(dbName: string): HoggConnectorNT;
@@ -44,7 +45,7 @@ export interface HoggConnectorNT {
 
   update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;
 
-  create(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;
+  create(tuples: HoggTupleNT[]): Promise<HoggResultB<string[]>>;
 
   delete(ids: string[]): Promise<HoggResult<boolean>>;
 
