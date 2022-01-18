@@ -4,16 +4,16 @@
 * пример
 ```typescript
   // создать экземпляр желаемого *коннектора, например HoggConnectorAirtable
-  const air = new HoggConnectorAirtable()
+  const air: HoggConnectorAirtable = new HoggConnectorAirtable()
   
   // выполняем базовую инициализацию "коннектора". 
   // Опции зависят от выбранного "коннектора" (см. документацию init() конкретного "коннектора")
-  air.init({apiKey: '<<<API_KEY>>>'})
+  air.init({apiKey: '<<<API_KEY>>>'});
   
   // конфигурируем другие параметры *коннектора
-  const conn: HoggConnectorNT[] = air
-    .db('<<<DB_NAME>>>')  // указать имя БД
-    .table('users')           // указать имя таблицы
+  const conn: HoggConnectorNT = air
+    .db('<<<DB_NAME>>>')  // указать имя БД, например 'appL0eof6VFTiPyjm'
+    .table('<<<TABLE_NAME>>>')           // указать имя таблицы
     .columns(['name', 'order'])  // имена колонок значения которых мы хотим получить (если такой колонки нет, то ошибки не будет)
 
   // когда *коннектор настроен, выполняем необходимые CRUD операции (см. ниже) ...
