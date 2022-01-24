@@ -2,6 +2,7 @@ import { HoggTupleNT } from '../interfaces/HoggTupleNT';
 import { BaseCell } from '../base-implements/BaseCell';
 import { BaseTuple } from '../base-implements/BaseTuple';
 import { RsuvValueAnd } from 'rsuv-lib';
+import { HoggCellNT } from '../interfaces/HoggCellNT';
 
 /**
  * Получить из tuple (1) значение ячейки с именем (2)
@@ -61,4 +62,57 @@ export const tuplesCreateFromRaw = (tuplesRaw: any[]): HoggTupleNT[] => {
     })
     return new BaseTuple().create(cells)
   })
+}
+
+/**
+ * Преобразует tuple (1) в объект.
+ * Значения поля columnNameGet() становятся ключами итогового объекта.
+ * Возвращает null если (1) невалиден либо не содежит ячеек с данными.
+ * @param tuple
+ */
+export const tupleToObject = (tuple: HoggTupleNT): object | null => {
+  const ret: any = {}
+  if (tuple) {
+    const cells: HoggCellNT[] = tuple.cellsGet()
+    if (cells && cells.length > 0) {
+      // LOOP
+      cells.forEach((elCell: HoggCellNT) => {
+        const key = elCell.columnNameGet()
+        let val;
+        if (elCell.isArray()) {
+          val = elCell.valuesGet()
+        } else {
+          val = elCell.valueGet()
+        }
+        ret[key] = val
+      })
+      return ret
+    }
+  }
+  return null
+}
+
+/**
+ * Создаёт tuple на базе объекта (1).
+ * Возвращает null при неверном (1)
+ * @param obj (1) --
+ */
+export const tupleFrom = (obj: object): HoggTupleNT | null => {
+  if (obj && Object.keys(obj).length > 0) {
+    const pairs = Object.entries(obj)
+    const cells: HoggCellNT[] = []
+    pairs.forEach((pair: [string, any]) => {
+      const key = pair[0]
+      const val = pair[1] || ''
+      const cell = Array.isArray(val) ?
+        new BaseCell().createB(key, val) :
+        new BaseCell().create(key, val);
+      cells.push(cell)
+      if (key === 'id') {
+        cells.push(new BaseCell().create('tid', val))
+      }
+    })
+    return new BaseTuple().create(cells)
+  }
+  return null
 }

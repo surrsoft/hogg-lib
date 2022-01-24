@@ -10,6 +10,14 @@ describe('airtable', () => {
     console.log('!!-!!-!! info {210414105020}\n', info);
   });
 
+  it('countAll', async () => {
+    const count = await air
+      .db('appXv6ry7Vn262nGR')
+      .table('main')
+      .countAll();
+    console.log('!!-!!-!! count {210414105020}\n', count);
+  });
+
   it('query', async () => {
     const tuples = await air
       .db('appMo64xRBNsBNH0C')

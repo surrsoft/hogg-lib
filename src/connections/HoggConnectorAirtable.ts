@@ -86,6 +86,36 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     }
   }
 
+  /**
+   * @inheritDoc
+   *
+   * В этой реализации делается через "костыль" - запрашиваются по 100 записей (больше Airtable не допускает
+   * запросить за раз) до тех пор пока они не закончатся
+   */
+  countAll(): Promise<number> {
+    let counter = 0
+    return new Promise((resolve, reject) => {
+      Airtable.base(this.dbName)
+        .table(this.tableName)
+        .select({})
+        .eachPage(
+          function page(records, fetchNextPage) {
+            records.forEach(function () {
+              counter++;
+            });
+            fetchNextPage();
+          },
+          function done(err) {
+            if (err) {
+              console.error(err);
+              reject(err);
+            }
+            resolve(counter);
+          }
+        );
+    });
+  }
+
   async query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]> {
     const columnNames = this.columnNames
     return new Promise((resolve, reject) => {
@@ -256,6 +286,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
         },
       }
     );
+    console.log('!!-!!-!! res {220119111816}\n', res) // del+
     if (res.ok) {
       try {
         const oj = res.json();

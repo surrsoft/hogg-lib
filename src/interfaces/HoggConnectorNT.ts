@@ -43,6 +43,11 @@ export interface HoggConnectorNT {
 
   queryOneById(id: string): Promise<HoggTupleNT>;
 
+  /**
+   * Возвращает общее количество записей в таблице БД
+   */
+  countAll(): Promise<number>;
+
   update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;
 
   create(tuples: HoggTupleNT[]): Promise<HoggResultB<string[]>>;
