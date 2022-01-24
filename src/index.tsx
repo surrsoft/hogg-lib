@@ -11,4 +11,4 @@ export { HoggResult } from './utils/HoggResult';
 export { HoggResultB } from './utils/HoggResultB';
 export { HoggOffsetCount } from './utils/HoggOffsetCount';
 export { HoggValueAnd } from './utils/HoggValueAnd';
-export { tupleCellValue, columnNamesFrom, tuplesCreateFromRaw, tupleAdapt, tupleToObject } from './utils/hogg_utils';
+export * from './utils/hogg_utils';
