@@ -97,7 +97,7 @@ export const tupleToObject = (tuple: HoggTupleNT): object | null => {
  * Возвращает null при неверном (1)
  * @param obj (1) --
  */
-export const tupleFrom = (obj: object): HoggTupleNT | null => {
+export const tupleFrom = (obj: any): HoggTupleNT | null => {
   if (obj && Object.keys(obj).length > 0) {
     const pairs = Object.entries(obj)
     const cells: HoggCellNT[] = []

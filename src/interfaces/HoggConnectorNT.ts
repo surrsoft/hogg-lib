@@ -48,8 +48,20 @@ export interface HoggConnectorNT {
    */
   countAll(): Promise<number>;
 
+  /**
+   * Среди ячеек в (1) должна быть ячейка с именем столбца 'tid'
+   * @param tuples
+   */
   update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;
 
+  /**
+   * Добавляет в хранилище записи (1). Возвращает массив id созданных записей.
+   *
+   * Ячейки из (1) представляющие массив значений, должны удовлетворять {@link HoggCellNT.isArray()} === true, а сами значения должны
+   * быть добвлены в ячейку методом {@link HoggCellNT#valuesSet()}
+   *
+   * @param tuples --
+   */
   create(tuples: HoggTupleNT[]): Promise<HoggResultB<string[]>>;
 
   delete(ids: string[]): Promise<HoggResult<boolean>>;

@@ -195,10 +195,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     });
   }
 
-  /**
-   * Среди ячеек в (1) должна быть ячейка с именем столбца 'tid'
-   * @param tuples
-   */
+
   async update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>> {
     if (!(tuples && tuples.length > 0)) {
       return new HoggResult<boolean>(
@@ -231,14 +228,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     }
   }
 
-  /**
-   * Добавляет в хранилище записи (1). Возвращает массив id созданных записей.
-   *
-   * Ячейки из (1) представляющие массив значений, должны удовлетворять {@link HoggCellNT.isArray()} === true, а сами значения должны
-   * быть добвлены в ячейку методом {@link HoggCellNT#valuesSet()}
-   *
-   * @param tuples --
-   */
+
   async create(tuples: HoggTupleNT[]): Promise<HoggResultB<string[]>> {
     if (!(tuples && tuples.length > 0)) {
       return new HoggResultB<string[]>(false, [], '[[220118134826]]', 'tuples is empty');
