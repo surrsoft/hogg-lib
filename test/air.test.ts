@@ -20,10 +20,26 @@ describe('airtable', () => {
 
   it('query', async () => {
     const tuples = await air
-      .db('appMo64xRBNsBNH0C')
+      .db('appZoHaX4a5tRLJlv')
       .table('main')
-      .columns(['scopes'])
-      .query(new HoggOffsetCount(true));
+      .columns(['title', 'tags'])
+      .filterVusc(`FIND("11",{title})`)
+      .query(new HoggOffsetCount(false, 0, 10));
+
+    console.log(
+      '!!-!!-!! 1435-20 tuples {210414143637}\n',
+      JSON.stringify(tuples, null, 2)
+    );
+
+  });
+
+  it('queryAccum', async () => {
+    const tuples = await air
+      .db('appZoHaX4a5tRLJlv')
+      .table('main')
+      .columns(['title', 'tags'])
+      // .filterVusc(`FIND("11",{title})`)
+      .queryAccum(new HoggOffsetCount(false, 0, 10), 'tags');
 
     console.log(
       '!!-!!-!! 1435-20 tuples {210414143637}\n',

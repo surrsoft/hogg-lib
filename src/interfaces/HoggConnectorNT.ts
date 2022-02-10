@@ -4,6 +4,7 @@ import { HoggResult } from '../utils/HoggResult';
 import HoggDbInfoNT from './HoggDbInfoNT';
 import { RsuvErr } from 'rsuv-lib';
 import { HoggResultB } from '../utils/HoggResultB';
+import { HoggResultAccum } from '../utils/HoggResultAccum';
 
 export interface HoggConnectorNT {
   db(dbName: string): HoggConnectorNT;
@@ -41,6 +42,13 @@ export interface HoggConnectorNT {
    */
   query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]>;
 
+  /**
+   * Аккумулирует значения из поля (2)
+   * @param offsetCount (1) --
+   * @param fieldTargetName (2) --
+   */
+  queryAccum(offsetCount: HoggOffsetCount, fieldTargetName: string): Promise<HoggResultAccum[]>;
+
   queryOneById(id: string): Promise<HoggTupleNT>;
 
   /**
@@ -49,7 +57,8 @@ export interface HoggConnectorNT {
   countAll(): Promise<number>;
 
   /**
-   * Среди ячеек в (1) должна быть ячейка с именем столбца 'tid'
+   * Среди ячеек в (1) должна быть ячейка с именем столбца 'tid'.
+   * Возвращает {value: true, ...} если для всех элементов (1) было выполнено успешное обновление
    * @param tuples
    */
   update(tuples: HoggTupleNT[]): Promise<HoggResult<boolean>>;

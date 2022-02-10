@@ -14,6 +14,7 @@ import HoggBaseFieldInfo from '../base-implements/HoggBaseFieldInfo';
 import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
 import { RsuvErr } from 'rsuv-lib';
 import { HoggResultB } from '../utils/HoggResultB';
+import { HoggResultAccum } from '../utils/HoggResultAccum';
 
 export class HoggConnectorAirtable implements HoggConnectorNT {
   private dbName: string = '';
@@ -94,10 +95,14 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
    */
   countAll(): Promise<number> {
     let counter = 0
+    const selectCfg: any = {}
+    if (this.pFilterVusc) {
+      selectCfg.filterByFormula = this.pFilterVusc;
+    }
     return new Promise((resolve, reject) => {
       Airtable.base(this.dbName)
         .table(this.tableName)
-        .select({})
+        .select(selectCfg)
         .eachPage(
           function page(records, fetchNextPage) {
             records.forEach(function () {
@@ -165,6 +170,83 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
               reject(err);
             }
             resolve(ret);
+          }
+        );
+    });
+  }
+
+  /**
+   * Аккумулирует значения из поля (2)
+   * @param offsetCount (1) --
+   * @param fieldTargetName (2) --
+   */
+  async queryAccum(offsetCount: HoggOffsetCount, fieldTargetName: string): Promise<HoggResultAccum[]> {
+    // const columnNames = this.columnNames
+    return new Promise((resolve, reject) => {
+      const retMap = new Map<string, string[]>()
+      // --- selectCfg
+      const selectCfg = {};
+      if (!offsetCount.getAll) {
+        const maxRecords = offsetCount.offset + offsetCount.count;
+        if (maxRecords > 0) {
+          // @ts-ignore
+          selectCfg.maxRecords = maxRecords;
+          // @ts-ignore
+          selectCfg.pageSize = maxRecords > 100 ? 100 : maxRecords;
+        }
+      }
+      if (this.columnNames && this.columnNames.length > 0) {
+        // @ts-ignore
+        selectCfg.fields = this.columnNames;
+      }
+      if (this.pFilterVusc) {
+        // @ts-ignore
+        selectCfg.filterByFormula = this.pFilterVusc;
+      }
+      if (this.pSort) {
+        // @ts-ignore
+        selectCfg.sort = this.pSort;
+      }
+      // ---
+      let counter = 0;
+      Airtable.base(this.dbName)
+        .table(this.tableName)
+        .select(selectCfg)
+        .eachPage(
+          function page(records, fetchNextPage) {
+            records.forEach(function (record) {
+              counter++;
+              if (counter > offsetCount.offset) {
+                debugger; // del+
+                const values = record.fields[fieldTargetName]
+                // --- values0
+                let values0: string[] = values as string[]
+                if (!Array.isArray(values)) {
+                  values0 = [values + '']
+                }
+                // --- retMap
+                values0.forEach(el => {
+                  if (retMap.has(el)) {
+                    retMap.get(el)?.push(record.id)
+                  } else {
+                    retMap.set(el, [record.id])
+                  }
+                })
+                // ---
+              }
+            });
+            fetchNextPage();
+          },
+          function done(err) {
+            if (err) {
+              console.error(err);
+              reject(err);
+            }
+            const rr: HoggResultAccum[] = []
+            retMap.forEach((val, key) => {
+              rr.push(new HoggResultAccum(key, val))
+            })
+            resolve(rr);
           }
         );
     });
