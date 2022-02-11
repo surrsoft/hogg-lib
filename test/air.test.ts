@@ -23,7 +23,7 @@ describe('airtable', () => {
       .db('appZoHaX4a5tRLJlv')
       .table('main')
       .columns(['title', 'tags'])
-      .filterVusc(`FIND("11",{title})`)
+      .filterVusc(`AND(FIND("[Европа]",{tags}),FIND("[классические новости]",{tags}))`)
       .query(new HoggOffsetCount(false, 0, 10));
 
     console.log(
@@ -39,7 +39,7 @@ describe('airtable', () => {
       .table('main')
       .columns(['title', 'tags'])
       // .filterVusc(`FIND("11",{title})`)
-      .queryAccum(new HoggOffsetCount(false, 0, 10), 'tags');
+      .queryAccum(new HoggOffsetCount(true), 'tags');
 
     console.log(
       '!!-!!-!! 1435-20 tuples {210414143637}\n',

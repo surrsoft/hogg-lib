@@ -1,5 +1,5 @@
 {
-  "version": "2.6.0",
+  "version": "2.8.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -62,7 +62,7 @@
     "@types/isomorphic-fetch": "^0.0.35",
     "airtable": "^0.11.1",
     "isomorphic-fetch": "^3.0.0",
-    "rsuv-lib": "^1.2.0"
+    "rsuv-lib": "^2.8.0"
   },
   "keywords": [
     "database",

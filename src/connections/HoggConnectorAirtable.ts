@@ -15,6 +15,7 @@ import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
 import { RsuvErr } from 'rsuv-lib';
 import { HoggResultB } from '../utils/HoggResultB';
 import { HoggResultAccum } from '../utils/HoggResultAccum';
+import { RSUV_NO_TAGS_SPC_VALUE } from 'rsuv-lib/dist/RsuvTu';
 
 export class HoggConnectorAirtable implements HoggConnectorNT {
   private dbName: string = '';
@@ -219,10 +220,15 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
               if (counter > offsetCount.offset) {
                 debugger; // del+
                 const values = record.fields[fieldTargetName]
+                console.log('!!-!!-!! values {220211125121}\n', values) // del+
                 // --- values0
                 let values0: string[] = values as string[]
                 if (!Array.isArray(values)) {
-                  values0 = [values + '']
+                  if (values) {
+                    values0 = [values + '']
+                  } else {
+                    values0 = [RSUV_NO_TAGS_SPC_VALUE]
+                  }
                 }
                 // --- retMap
                 values0.forEach(el => {
