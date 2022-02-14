@@ -1,3 +1,5 @@
+import { EnValueTypeNotion } from '../utils/hogg_utils';
+
 export interface HoggCellNT {
   create(columnName: string, value: string): HoggCellNT;
 
@@ -14,4 +16,9 @@ export interface HoggCellNT {
   isArraySet(): void
 
   isArray(): boolean
+
+  /**
+   * обязательно для HoggConnectorNotion, см. [220214213314]
+   */
+  typeNotion?: EnValueTypeNotion
 }

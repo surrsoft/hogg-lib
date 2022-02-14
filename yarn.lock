@@ -1256,6 +1256,14 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
+"@notionhq/client@^0.4.13":
+  version "0.4.13"
+  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-0.4.13.tgz#b29c2ecc8c25508119f9b2875c2dda6c12f1c889"
+  integrity sha512-tHC95h4JZYteHmIL49xdta0Yb9q0peXySqo9cqTQEVzpPwUdcPNgWQljMqfrSVKqlpGNX+DhXztY0LR6f3Iw6A==
+  dependencies:
+    "@types/node-fetch" "^2.5.10"
+    node-fetch "^2.6.1"
+
 "@polka/url@^1.0.0-next.9":
   version "1.0.0-next.12"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.12.tgz#431ec342a7195622f86688bbda82e3166ce8cb28"
@@ -1481,6 +1489,14 @@
   version "4.14.178"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.178.tgz#341f6d2247db528d4a13ddbb374bcdc80406f4f8"
   integrity sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==
+
+"@types/node-fetch@^2.5.10":
+  version "2.5.12"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.12.tgz#8a6f779b1d4e60b7a57fb6fd48d84fb545b9cc66"
+  integrity sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==
+  dependencies:
+    "@types/node" "*"
+    form-data "^3.0.0"
 
 "@types/node@*", "@types/node@>=8.0.0 <15":
   version "14.14.37"
@@ -2859,7 +2875,7 @@ colorette@^1.2.1, colorette@^1.2.2:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.2.tgz#cbcc79d5e99caea2dbf10eb3a26fd8b3e6acfa94"
   integrity sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==
 
-combined-stream@^1.0.6, combined-stream@~1.0.6:
+combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
@@ -4199,6 +4215,15 @@ forever-agent@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
+
+form-data@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
+  integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    mime-types "^2.1.12"
 
 form-data@~2.3.2:
   version "2.3.3"
@@ -8029,10 +8054,10 @@ rsuv-lib@^1.2.0:
   dependencies:
     isomorphic-fetch "^3.0.0"
 
-rsuv-lib@^2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/rsuv-lib/-/rsuv-lib-2.8.0.tgz#6186e11aed65baa8af237aafc5fccc9a382a8e4e"
-  integrity sha512-779xAsdMcf4S8A1pF/wQj+PxmOb92u1nH7Ho7n0mPr6MoREWYO0c2J0M6HpsfsvOAaHCE8etcqZi/ZLI6wRwCw==
+rsuv-lib@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/rsuv-lib/-/rsuv-lib-2.9.0.tgz#7d6b677990becd96cb010bb2ba3ce5201b9e6916"
+  integrity sha512-D7P7W7BRh0vC1qImwKIdn0yArPb/Ow0scAAFtfrK9NKJK5p5LApF8FGUYtXqylkWm1mfrfbp251+BhkhQqtYxw==
   dependencies:
     "@types/lodash" "^4.14.170"
     "@types/validator" "^13.6.2"

@@ -12,10 +12,10 @@ import 'isomorphic-fetch';
 import HoggBaseTableInfo from '../base-implements/HoggBaseTableInfo';
 import HoggBaseFieldInfo from '../base-implements/HoggBaseFieldInfo';
 import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
-import { RsuvErr } from 'rsuv-lib';
+import { RsuvErr, RsuvTu } from 'rsuv-lib';
 import { HoggResultB } from '../utils/HoggResultB';
 import { HoggResultAccum } from '../utils/HoggResultAccum';
-import { RSUV_NO_TAGS_SPC_VALUE } from 'rsuv-lib/dist/RsuvTu';
+
 
 export class HoggConnectorAirtable implements HoggConnectorNT {
   private dbName: string = '';
@@ -227,7 +227,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
                   if (values) {
                     values0 = [values + '']
                   } else {
-                    values0 = [RSUV_NO_TAGS_SPC_VALUE]
+                    values0 = [RsuvTu.RSUV_NO_TAGS_SPC_VALUE]
                   }
                 }
                 // --- retMap
