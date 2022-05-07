@@ -218,9 +218,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
             records.forEach(function (record) {
               counter++;
               if (counter > offsetCount.offset) {
-                debugger; // del+
                 const values = record.fields[fieldTargetName]
-                console.log('!!-!!-!! values {220211125121}\n', values) // del+
                 // --- values0
                 let values0: string[] = values as string[]
                 if (!Array.isArray(values)) {
@@ -364,7 +362,6 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
         },
       }
     );
-    console.log('!!-!!-!! res {220119111816}\n', res) // del+
     if (res.ok) {
       try {
         const oj = res.json();

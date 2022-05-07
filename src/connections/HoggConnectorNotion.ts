@@ -146,7 +146,6 @@ export class HoggConnectorNotion implements HoggConnectorNT {
   }
 
   async query(offsetCount: HoggOffsetCount): Promise<HoggTupleNT[]> {
-    console.log('!!-!!-!! offsetCount {220214182603}\n', offsetCount) // del+
     if (offsetCount.getAll) {
       let resBatch: any = {}
       let startCursor;

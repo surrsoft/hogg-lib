@@ -1,6 +1,7 @@
 import { BaseCell, BaseTuple, EnValueTypeNotion, HoggConnectorAirtable, HoggOffsetCount, tupleToObject } from '../src';
 import { airtableApiKey, notionToken } from '../src/config-nx';
-import { HoggConnectorNotion } from '../src/connections/HoggConnectorNotion';
+import { HoggConnectorNotion } from '../src';
+import * as _ from 'lodash';
 
 const air = new HoggConnectorAirtable();
 air.init({apiKey: airtableApiKey});
@@ -103,7 +104,8 @@ async function updateOne(dbId: string, id: string, val: number) {
 }
 
 describe('notion', () => {
-  it('not test', async () => {
+
+  it('вопрос-ответ shuffle', async () => {
     const dbId = '5bda5482e2e14df388784831369e2ca9'
     const res = await notion
       .db(dbId)
@@ -113,22 +115,21 @@ describe('notion', () => {
       const obj: any = tupleToObject(tuple)
       return obj.tid
     })
-    console.log('!!-!!-!! tids.length {220214215826}\n', tids.length) // del+
-    const promises = tids.map(id => updateOne(dbId, id, 11))
+    const tidsRandom = _.shuffle(tids)
+
+    const promises = tids.map((id) => updateOne(dbId, id, tidsRandom.findIndex(el => el === id)))
     await Promise.all(promises)
-    console.log(`!!-!!-!! -> :::::::::::::: DONE {220214220152}:${Date.now()}`) // del+
-  })
+  }, 30000)
+
 
   it('query', async () => {
     const res = await notion
       .db('5bda5482e2e14df388784831369e2ca9')
       .columns(['вопрос'])
       .query(new HoggOffsetCount(true))
-    // console.log('!!-!!-!! res {220214183049}\n', res) // del+
 
     res.forEach(tuple => {
       const obj = tupleToObject(tuple)
-      console.log('!!-!!-!! obj {220214211257}\n', obj) // del+
     })
   })
 
@@ -143,7 +144,5 @@ describe('notion', () => {
     const res = await notion
       .db('5bda5482e2e14df388784831369e2ca9')
       .update(tuples)
-    console.log('!!-!!-!! res {220214183049}\n', res) // del+
-
   })
 })

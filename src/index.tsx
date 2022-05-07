@@ -1,4 +1,5 @@
 export { HoggConnectorAirtable } from './connections/HoggConnectorAirtable';
+export { HoggConnectorNotion } from './connections/HoggConnectorNotion';
 
 export { HoggCellNT } from './interfaces/HoggCellNT';
 export { HoggConnectorNT } from './interfaces/HoggConnectorNT';
