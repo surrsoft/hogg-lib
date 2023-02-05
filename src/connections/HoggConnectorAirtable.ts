@@ -15,6 +15,7 @@ import HoggBaseDbInfo from '../base-implements/HoggBaseDbInfo';
 import { RsuvErr, RsuvTu } from 'rsuv-lib';
 import { HoggResultB } from '../utils/HoggResultB';
 import { HoggResultAccum } from '../utils/HoggResultAccum';
+import loChunk from 'lodash/chunk';
 
 
 export class HoggConnectorAirtable implements HoggConnectorNT {
@@ -52,7 +53,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
   }
 
   private static convertRecord(record: Record<FieldSet>, columnNames: string[]): HoggTupleNT {
-    const {fields} = record;
+    const { fields } = record;
     const cells: HoggCellNT[] = columnNames.map((name) => {
       return new BaseCell().create(name, '')
     })
@@ -76,7 +77,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
   }
 
   init(options: { apiKey: string }): void {
-    const {apiKey} = options;
+    const { apiKey } = options;
     this.nxApiKey = apiKey;
     if (apiKey) {
       const dc = Airtable.default_config();
@@ -291,7 +292,7 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
       );
     } else {
       // ---
-      const {updConfs, isOk} = updConfsGet(tuples);
+      const { updConfs, isOk } = updConfsGet(tuples);
       // ---
       if (!isOk) {
         return new HoggResult(false, '[[210223191902]]', 'tid problem');
@@ -340,15 +341,35 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
     }
   }
 
+  /**
+   * Airtable за один раз позволяет удалять не более 10 записей. Поэтому тут мы разбиваем исходный {@param ids} на
+   * чанки по 10 штук
+   *
+   * @link https://airtable.com/developers/web/api/delete-multiple-records
+   */
   async delete(ids: string[]): Promise<HoggResult<boolean>> {
-    await Airtable.base(this.dbName)
-      .table(this.tableName)
-      .destroy(ids, function (err: any) {
-        if (err) {
-          return new HoggResult(false, '[[210223202024-3]]', err.message);
-        }
-        return new HoggResult(true);
-      });
+
+    const fn = async (idsChunk: string[]) => {
+      Airtable.base(this.dbName)
+        .table(this.tableName)
+        .destroy(idsChunk, function (err: any) {
+          if (err) {
+            throw new Error()
+          }
+        });
+    }
+
+    const chunks = loChunk(ids, 10);
+    const promises = chunks.map(chunk => {
+      return fn(chunk);
+    })
+
+    try {
+      await Promise.all(promises);
+    } catch (err) {
+      return new HoggResult(false, err.code, err.message);
+    }
+
     return new HoggResult(true);
   }
 
@@ -393,7 +414,7 @@ function updConfsGet(tuples: HoggTupleNT[]) {
   const isOk = tuples.every(tuple => {
     // LOOP
     const cells: HoggCellNT[] = tuple.cellsGet();
-    const updConf: any = {id: '', fields: {}};
+    const updConf: any = { id: '', fields: {} };
     cells.forEach(cell => {
       // LOOP-2
       const fieldName = cell.columnNameGet();
@@ -409,7 +430,7 @@ function updConfsGet(tuples: HoggTupleNT[]) {
     updConfs.push(updConf);
     return true;
   }); // LOOP
-  return {updConfs, isOk};
+  return { updConfs, isOk };
 }
 
 /**
@@ -421,7 +442,7 @@ function updConfsAtCreateGet(tuples: HoggTupleNT[]) {
   tuples.forEach(tuple => {
     // LOOP
     const cells: HoggCellNT[] = tuple.cellsGet();
-    const updConf: any = {fields: {}};
+    const updConf: any = { fields: {} };
     cells.forEach(cell => {
       // LOOP-2
       const fieldName = cell.columnNameGet();

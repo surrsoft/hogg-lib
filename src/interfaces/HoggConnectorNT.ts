@@ -73,6 +73,11 @@ export interface HoggConnectorNT {
    */
   create(tuples: HoggTupleNT[]): Promise<HoggResultB<string[]>>;
 
+  /**
+   * Должен вернуть HoggResult<true> если все удаления успешны, иначе должен вернуть HoggResult<false>
+   *
+   * @param {string[]} ids имена или идентификаторы записей
+   */
   delete(ids: string[]): Promise<HoggResult<boolean>>;
 
   dbInfoGet(dbName: string): Promise<HoggDbInfoNT | RsuvErr>;
