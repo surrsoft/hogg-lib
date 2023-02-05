@@ -40,3 +40,5 @@
 * https://github.com/formium/tsdx
 * https://itnext.io/testing-with-jest-in-typescript-cc1cd0095421 - 'Testing with jest in TypeScript'
 
+# История версий
+- 2023-02-05 2.11.0 => 3.0.0 изменена функция delete (src/connections/HoggConnectorAirtable.ts:350) с тем чтобы поддерживала удаление более 10 записей
