@@ -349,19 +349,22 @@ export class HoggConnectorAirtable implements HoggConnectorNT {
    */
   async delete(ids: string[]): Promise<HoggResult<boolean>> {
 
-    const fn = async (idsChunk: string[]) => {
-      Airtable.base(this.dbName)
-        .table(this.tableName)
-        .destroy(idsChunk, function (err: any) {
-          if (err) {
-            throw new Error()
-          }
-        });
+    const fnDelete = async (idsChunk: string[]) => {
+      return new Promise((resolve, reject) => {
+        Airtable.base(this.dbName)
+          .table(this.tableName)
+          .destroy(idsChunk, function (err: any, records: any) {
+            if (err) {
+              reject({code: err.error, message: err.message})
+            }
+            resolve(records)
+          });
+      });
     }
 
     const chunks = loChunk(ids, 10);
     const promises = chunks.map(chunk => {
-      return fn(chunk);
+      return fnDelete(chunk);
     })
 
     try {

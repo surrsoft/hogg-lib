@@ -88,6 +88,19 @@ describe('airtable', () => {
     );
 
   });
+
+  it('delete', async () => {
+
+    const result = await air
+      .db('appZoHaX4a5tRLJlv')
+      .table('main')
+      .delete(['recIMsIXnSOzNSH3Q'])
+
+    console.log(
+      '!!-!!-!! 1435-20 result {210414143638}\n',
+      JSON.stringify(result, null, 2)
+    );
+  });
 });
 
 async function updateOne(dbId: string, id: string, val: number) {
@@ -122,27 +135,27 @@ describe('notion', () => {
   }, 30000)
 
 
-  it('query', async () => {
-    const res = await notion
-      .db('5bda5482e2e14df388784831369e2ca9')
-      .columns(['вопрос'])
-      .query(new HoggOffsetCount(true))
+  // it('query', async () => {
+  //   const res = await notion
+  //     .db('5bda5482e2e14df388784831369e2ca9')
+  //     .columns(['вопрос'])
+  //     .query(new HoggOffsetCount(true))
+  //
+  //   res.forEach(tuple => {
+  //     const obj = tupleToObject(tuple)
+  //   })
+  // })
 
-    res.forEach(tuple => {
-      const obj = tupleToObject(tuple)
-    })
-  })
-
-  it('update', async () => {
-    const tuples = []
-    // ---
-    const cellId = new BaseCell().create('tid', '2c7b8b0d-a755-4771-9142-77d0ab35c68d')
-    const cell1 = new BaseCell().createAtNotion('random', 11, EnValueTypeNotion.NUMBER)
-    const tuple = new BaseTuple().create([cellId, cell1])
-    tuples.push(tuple)
-    // ---
-    const res = await notion
-      .db('5bda5482e2e14df388784831369e2ca9')
-      .update(tuples)
-  })
+  // it('update', async () => {
+  //   const tuples = []
+  //   // ---
+  //   const cellId = new BaseCell().create('tid', '2c7b8b0d-a755-4771-9142-77d0ab35c68d')
+  //   const cell1 = new BaseCell().createAtNotion('random', 11, EnValueTypeNotion.NUMBER)
+  //   const tuple = new BaseTuple().create([cellId, cell1])
+  //   tuples.push(tuple)
+  //   // ---
+  //   const res = await notion
+  //     .db('5bda5482e2e14df388784831369e2ca9')
+  //     .update(tuples)
+  // })
 })
